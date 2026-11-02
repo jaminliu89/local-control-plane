@@ -1,0 +1,8 @@
+**/*.map
+**/.DS_Store
+../**
+!dist/**
+!media/**
+!package.json
+!README.md
+!media/icon.svg
