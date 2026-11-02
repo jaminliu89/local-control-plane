@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { brokerRequest } from "../broker/client.js";
+import { discoverCapabilities } from "../capabilities/discovery.js";
 import { loadCommands } from "../broker/commands.js";
 import { loadSession } from "../broker/session.js";
 import { probeHelperAuth, readHelperHint } from "../helper/client.js";
@@ -151,6 +152,17 @@ export async function runDoctor(workspace: string): Promise<DoctorReport> {
       });
     }
   }
+
+  const discovery = discoverCapabilities(process.env.SKILLHUB_HOME);
+  const registry = discovery.candidates[0];
+  checks.push({
+    id: "skillhub-discovery",
+    level: "warn",
+    title: "集团能力发现（只读）",
+    detail: registry
+      ? `${registry.status} · ${registry.source} · 未执行能力连接验证`
+      : discovery.missing.join("; "),
+  });
 
   const ok = checks.every((check) => check.level !== "fail");
   return { workspace: root, checks, ok };
