@@ -21,6 +21,10 @@ jobs:
         run: node scripts/check-protected-changes.mjs
         env:
           PROTECTED_BASE_REF: origin/main
+      - name: Report protected capability impact
+        run: node scripts/report-change-impact.mjs
+        env:
+          PROTECTED_BASE_REF: origin/main
       - run: npm test
       - name: Verify protected behavior baseline
         run: node scripts/verify-protected-baseline.mjs
