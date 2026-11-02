@@ -15,6 +15,12 @@ jobs:
           node-version: "22"
           cache: npm
       - run: npm ci
+      - name: Fetch protected baseline comparison
+        run: git fetch --no-tags --depth=1 origin main
+      - name: Check protected controls and tests
+        run: node scripts/check-protected-changes.mjs
+        env:
+          PROTECTED_BASE_REF: origin/main
       - run: npm test
       - name: Verify protected behavior baseline
         run: node scripts/verify-protected-baseline.mjs
