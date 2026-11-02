@@ -21,6 +21,11 @@ const protectedFiles = new Set([
   "scripts/verify-protected-baseline.mjs",
   "scripts/check-protected-changes.mjs",
   ".github/workflows/ci.yml",
+  "src/test/acceptance.test.ts",
+  "src/test/broker.test.ts",
+  "src/test/doctor.test.ts",
+  "src/test/capability-discovery.test.ts",
+  "src/test/skillhub-route.test.ts",
 ]);
 const touched = files.filter((file) => protectedFiles.has(file));
 if (touched.length > 0) {
