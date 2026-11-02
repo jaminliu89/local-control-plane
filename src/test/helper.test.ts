@@ -40,7 +40,7 @@ test("mock 助手在线时可读 UI、截帧，并把授权写进时间线", asy
   });
   const token = crypto.randomBytes(16).toString("hex");
   const sessionId = crypto.randomBytes(4).toString("hex");
-  const broker = await startBroker({ wobkspace, token, sessionId });
+  const broker = await startBroker({ workspace, token, sessionId });
   try {
     const ui = await fetch(`http://127.0.0.1:${broker.port}/v1/observe_ui`, {
       method: "POST",
