@@ -1,39 +1,40 @@
 {
   "name": "local-control-plane",
-  "version": "0.1.0",
-  "description": "Local Control Plane — broker, mac-helper, extension, and doctor",
+  "version": "0.1.11",
+  "private": true,
   "type": "module",
+  "description": "本机控制面：VS Code 扩展、本机 broker、时间线见证、过程日志、MCP 与 DeepSeek Harness 插件。",
+  "engines": {
+    "node": ">=18"
+  },
   "bin": {
-    "local-control-plane": "dist/broker/cli.js",
-    "cp": "dist/broker/cli.js",
-    "cp-doctor": "dist/doctor/cli.js",
-    "cp-helper": "dist/helper/cli.js",
-    "cp-init": "dist/init/cli.js",
-    "cp-journal": "dist/journal/cli.js",
-    "cp-mcp": "dist/mcp/stdio.js"
+    "controlplane-mcp": "./dist/mcp/stdio.js",
+    "controlplane-witness": "./dist/witness/watch.js",
+    "controlplane-broker": "./dist/broker/cli.js",
+    "controlplane-journal": "./dist/journal/cli.js",
+    "controlplane-init": "./dist/init/cli.js",
+    "controlplane-doctor": "./dist/doctor/cli.js",
+    "controlplane-helper": "./dist/helper/cli.js"
   },
   "scripts": {
-    "build": "node esbuild.mjs",
+    "compile": "tsc -p tsconfig.json && node esbuild.mjs",
+    "test": "tsc -p tsconfig.json && node --test --test-reporter spec \"dist/test/**/*.test.js\"",
+    "witness": "node dist/witness/watch.js",
+    "journal": "node dist/journal/cli.js",
+    "init": "node dist/init/cli.js",
+    "doctor": "node dist/doctor/cli.js",
+    "helper": "node dist/helper/cli.js",
+    "smoke": "npm run compile && node scripts/smoke.mjs",
+    "package:vsix": "npm run compile && cd extension && npx --yes @vscode/vsce@3.2.1 package --allow-missing-repository --skip-license -o ../local-control-plane-0.1.11.vsix",
     "pack": "node scripts/pack-release.mjs",
-    "smoke": "node scripts/smoke.mjs",
-    "test": "node --test --test-port=0 --import tsx --test-reporter=spec --test-reporter=tap --test-reporter-destination=stdout dist/test/*.test.js",
-    "typecheck": "tsc --noEmit"
-  },
-  "engines": {
-    "node": ">=20"
-  },
-  "dependencies": {
-    "@imguy/remote": "^1",
-    "@imguy/server": "^1",
-    "control-plane-dsh-plugin": "file:./dsh-plugin",
-    "imguy": "^1",
-    "zstd": "^3.26.2"
+    "pack:full": "node scripts/pack-release.mjs --profile full",
+    "compose:full": "node scripts/compose-full.mjs",
+    "build:mac-helper": "bash mac-helper/scripts/build-app.sh"
   },
   "devDependencies": {
-    "@types/node": "^22.14.0",
-    "esbuild": "0.25.0",
-    "tsemble": "^5.0.0",
-    "tsx": "^4.20.5",
-    "typescript": "^5.9.2"
+    "@types/node": "^22.10.5",
+    "@types/vscode": "^1.101.0",
+    "esbuild": "^0.24.2",
+    "typescript": "^5.7.3"
   }
 }
