@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "protectedCapabilities": [
+    {
+      "id": "broker-security",
+      "description": "Broker authorization and workspace edit safety",
+      "requiredTests": ["dist/test/acceptance.test.js", "dist/test/broker.test.js"]
+    },
+    {
+      "id": "doctor-health",
+      "description": "Local doctor and capability diagnostics",
+      "requiredTests": ["dist/test/doctor.test.js", "dist/test/capability-discovery.test.js", "dist/test/skillhub-route.test.js"]
+    }
+  ]
+}
