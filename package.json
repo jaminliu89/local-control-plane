@@ -1,0 +1,39 @@
+{
+  "name": "local-control-plane",
+  "version": "0.1.0",
+  "description": "Local Control Plane — broker, mac-helper, extension, and doctor",
+  "type": "module",
+  "bin": {
+    "local-control-plane": "dist/broker/cli.js",
+    "cp": "dist/broker/cli.js",
+    "cp-doctor": "dist/doctor/cli.js",
+    "cp-helper": "dist/helper/cli.js",
+    "cp-init": "dist/init/cli.js",
+    "cp-journal": "dist/journal/cli.js",
+    "cp-mcp": "dist/mcp/stdio.js"
+  },
+  "scripts": {
+    "build": "node esbuild.mjs",
+    "pack": "node scripts/pack-release.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "test": "node --test --test-port=0 --import tsx --test-reporter=spec --test-reporter=tap --test-reporter-destination=stdout dist/test/*.test.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@imguy/remote": "^1",
+    "@imguy/server": "^1",
+    "control-plane-dsh-plugin": "file:./dsh-plugin",
+    "imguy": "^1",
+    "zstd": "^3.26.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "esbuild": "0.25.0",
+    "tsemble": "^5.0.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  }
+}
