@@ -19,7 +19,7 @@ function main(): void {
   }
   const flag = argv.indexOf("--workspace");
   const workspace =
-    flag >½ 0 && argv[flag + 1] && !argv[flag + 1]!.startsWith("--")
+    flag >= 0 && argv[flag + 1] && !argv[flag + 1]!.startsWith("--")
       ? path.resolve(argv[flag + 1]!)
       : process.env.CONTROLPLANE_WORKSPACE
         ? path.resolve(process.env.CONTROLPLANE_WORKSPACE)
