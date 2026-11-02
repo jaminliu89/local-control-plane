@@ -10,12 +10,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
           cache: npm
       - run: npm ci
+      - name: Check protected controls and tests
+        run: node scripts/check-protected-changes.mjs
+        env:
+          PROTECTED_BASE_REF: origin/main
+      - name: Report protected capability impact
+        run: node scripts/report-change-impact.mjs
+        env:
+          PROTECTED_BASE_REF: origin/main
       - run: npm test
+      - name: Verify protected behavior baseline
+        run: node scripts/verify-protected-baseline.mjs
       - run: npm run smoke
       - run: npm run pack
       - uses: actions/upload-artifact@v4
@@ -33,7 +45,7 @@ jobs:
       - name: Build ControlPlaneHelper.app
         run: |
           cd mac-helper
-          ./scripts/build-app.sh
+          bash ./scripts/build-app.sh
       - uses: actions/upload-artifact@v4
         with:
           name: ControlPlaneHelper-app

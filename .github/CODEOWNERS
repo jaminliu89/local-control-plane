@@ -1,0 +1,9 @@
+# Protected engineering controls and regression tests.
+# Replace the owner below with an independent engineering reviewer or team
+# before enabling required CODEOWNERS review on the protected branch.
+# A code author must not self-approve these changes.
+/.controlplane/protected-baseline.json @jaminliu89
+/scripts/verify-protected-baseline.mjs @jaminliu89
+/scripts/check-protected-changes.mjs @jaminliu89
+/.github/workflows/ci.yml @jaminliu89
+/src/test/ @jaminliu89
