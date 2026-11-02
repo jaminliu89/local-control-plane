@@ -10,13 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
           cache: npm
       - run: npm ci
-      - name: Fetch protected baseline comparison
-        run: git fetch --no-tags --depth=1 origin main
       - name: Check protected controls and tests
         run: node scripts/check-protected-changes.mjs
         env:
@@ -45,7 +45,7 @@ jobs:
       - name: Build ControlPlaneHelper.app
         run: |
           cd mac-helper
-          ./scripts/build-app.sh
+          bash ./scripts/build-app.sh
       - uses: actions/upload-artifact@v4
         with:
           name: ControlPlaneHelper-app
