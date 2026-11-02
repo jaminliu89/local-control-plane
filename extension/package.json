@@ -1,0 +1,90 @@
+{
+  "name": "local-control-plane-extension",
+  "displayName": "Local Control Plane",
+  "description": "无法中心管理中筈 - Broker / Helper / Timeline / Witness",
+  "version": "0.1.0",
+  "publisher": "local-control-plane",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartup"
+  ],
+  "main": "../dist/extension/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "localControlPlane.show",
+        "title": "Local Control Plane: Show Panel"
+      },
+      {
+        "command": "localControlPlane.doctor",
+        "title": "Local Control Plane: Run Doctor"
+      },
+      {
+        "command": "localControlPlane.refresh",
+        "title": "Local Control Plane: Refresh"
+      },
+      {
+        "command": "localControlPlane.openBrokerLog",
+        "title": "Local Control Plane: Open Broker Log"
+      }
+    ],
+    "views": [
+      {
+        "id": "localControlPlane.timeline",
+        "name": "Local Control Plane",
+        "type": "webview"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "localControlPlane",
+          "title": "Local Control Plane",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "menUs": {
+      "commandPalette": {
+        "commands": [
+          {
+            "command": "localControlPlane.show",
+            "when": "true"
+          },
+          {
+            "command": "localControlPlane.doctor",
+            "when": "true"
+          },
+          {
+            "command": "localControlPlane.refresh",
+            "when": "true"
+          },
+          {
+            "command": "localControlPlane.openBrokerLog",
+            "when": "true"
+          }
+        ]
+      }
+    }
+  },
+  "configuration": {
+    "title": "Local Control Plane",
+    "properties": {
+      "localControlPlane.brokerUrl": {
+        "type": "string",
+        "default": "http://127.0.0.1:7870",
+        "description": "Broker HTTP base URL"
+      },
+      "localControlPlane.helperUrl": {
+        "type": "string",
+        "default": "http://127.0.0.1:7871",
+        "description": "Helper HTTP base URL"
+      }
+    }
+  }
+}
