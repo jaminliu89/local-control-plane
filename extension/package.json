@@ -1,90 +1,105 @@
 {
-  "name": "local-control-plane-extension",
-  "displayName": "Local Control Plane",
-  "description": "无法中心管理中筈 - Broker / Helper / Timeline / Witness",
-  "version": "0.1.0",
+  "name": "local-control-plane",
+  "displayName": "本机控制面",
+  "description": "本机控制面：模型只交紧凑意图，broker 在本地执行声明过的命令，回执保持压缩。",
+  "version": "0.1.11",
   "publisher": "local-control-plane",
   "engines": {
-    "vscode": "^1.85.0"
+    "vscode": "^1.101.0"
   },
   "categories": [
     "Other"
   ],
   "activationEvents": [
-    "onStartup"
+    "onStartupFinished"
   ],
-  "main": "../dist/extension/extension.js",
+  "main": "./dist/extension.cjs",
   "contributes": {
-    "commands": [
+    "mcpServerDefinitionProviders": [
       {
-        "command": "localControlPlane.show",
-        "title": "Local Control Plane: Show Panel"
-      },
-      {
-        "command": "localControlPlane.doctor",
-        "title": "Local Control Plane: Run Doctor"
-      },
-      {
-        "command": "localControlPlane.refresh",
-        "title": "Local Control Plane: Refresh"
-      },
-      {
-        "command": "localControlPlane.openBrokerLog",
-        "title": "Local Control Plane: Open Broker Log"
-      }
-    ],
-    "views": [
-      {
-        "id": "localControlPlane.timeline",
-        "name": "Local Control Plane",
-        "type": "webview"
+        "id": "controlplane",
+        "label": "本机控制面"
       }
     ],
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "localControlPlane",
-          "title": "Local Control Plane",
+          "id": "controlplane",
+          "title": "本机控制面",
           "icon": "media/icon.svg"
         }
       ]
     },
-    "menUs": {
-      "commandPalette": {
-        "commands": [
-          {
-            "command": "localControlPlane.show",
-            "when": "true"
-          },
-          {
-            "command": "localControlPlane.doctor",
-            "when": "true"
-          },
-          {
-            "command": "localControlPlane.refresh",
-            "when": "true"
-          },
-          {
-            "command": "localControlPlane.openBrokerLog",
-            "when": "true"
-          }
-        ]
-      }
-    }
-  },
-  "configuration": {
-    "title": "Local Control Plane",
-    "properties": {
-      "localControlPlane.brokerUrl": {
-        "type": "string",
-        "default": "http://127.0.0.1:7870",
-        "description": "Broker HTTP base URL"
+    "views": {
+      "controlplane": [
+        {
+          "type": "webview",
+          "id": "controlplane.timeline",
+          "name": "时间线"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "controlplane.refreshTimeline",
+        "title": "本机控制面: 刷新时间线",
+        "icon": "$(refresh)"
       },
-      "localControlPlane.helperUrl": {
-        "type": "string",
-        "default": "http://127.0.0.1:7871",
-        "description": "Helper HTTP base URL"
+      {
+        "command": "controlplane.copyMcpConfig",
+        "title": "本机控制面: 复制 MCP 配置"
+      },
+      {
+        "command": "controlplane.showStatus",
+        "title": "本机控制面: 显示 broker 状态"
+      },
+      {
+        "command": "controlplane.runDoctor",
+        "title": "本机控制面: 运行 doctor 自检"
+      },
+      {
+        "command": "controlplane.openWitness",
+        "title": "本机控制面: 打开终端见证"
+      },
+      {
+        "command": "controlplane.exportJournal",
+        "title": "本机控制面: 导出编程过程日志"
+      },
+      {
+        "command": "controlplane.initWorkspace",
+        "title": "本机控制面: 初始化工作区命令"
+      },
+      {
+        "command": "controlplane.startDemoHelper",
+        "title": "本机控制面: 启动演示助手"
+      },
+      {
+        "command": "controlplane.stopDemoHelper",
+        "title": "本机控制面: 停止演示助手"
+      },
+      {
+        "command": "controlplane.openAuthHelp",
+        "title": "本机控制面: 打开授权设置"
       }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "controlplane.refreshTimeline",
+          "when": "view == controlplane.timeline",
+          "group": "navigation"
+        },
+        {
+          "command": "controlplane.openWitness",
+          "when": "view == controlplane.timeline",
+          "group": "navigation"
+        },
+        {
+          "command": "controlplane.exportJournal",
+          "when": "view == controlplane.timeline",
+          "group": "navigation"
+        }
+      ]
     }
   }
 }

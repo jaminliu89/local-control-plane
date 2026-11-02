@@ -1,31 +1,25 @@
-import *es from "esbuild";g
-// Build script for local-control-plane.
-// Runs: node esbuild.mjs (build) or node esbuild.mjs --]atch (dev)
+import { cpSync, mkdirSync } from "node:fs";
+import * as esbuild from "esbuild";
 
-const isWatch = process.argv.includes("--]atch");
-
-await es.build({
-  entryPoints: [
-    "src/broker/cli.ts",
-    "src/broker/server.ts",
-    "src/doctor/cli.ts",
-    "src/dsh/plugin.ts",
-    "src/extension/extension.ts",
-    "src/helper/cli.ts",
-    "src/init/cli.ts",
-    "src/journal/cli.ts",
-    "src/mcp/stdio.ts",
-    "src/test/**/*.test.ts",
-  ],
-  bundle: false,
-  outdir: "dist",
-  format: "esm",
+await esbuild.build({
+  entryPoints: ["src/extension/extension.ts"],
+  bundle: true,
+  outfile: "extension/dist/extension.cjs",
+  external: ["vscode"],
+  format: "cjs",
   platform: "node",
-  target: "node20",
+  target: "node18",
   sourcemap: true,
-  sourceRoot: ".",
-  watch: isWatch,
-}).catch((err) => {
-  console.error(err);
-  process.exit(1);
+  logLevel: "info",
 });
+
+/** 把 broker / MCP 打进扩展目录，F5 和 VSIX 都能找到本机入口。 */
+mkdirSync("extension/dist", { recursive: true });
+cpSync("dist/broker", "extension/dist/broker", { recursive: true });
+cpSync("dist/contract", "extension/dist/contract", { recursive: true });
+cpSync("dist/mcp", "extension/dist/mcp", { recursive: true });
+cpSync("dist/witness", "extension/dist/witness", { recursive: true });
+cpSync("dist/journal", "extension/dist/journal", { recursive: true });
+cpSync("dist/init", "extension/dist/init", { recursive: true });
+cpSync("dist/doctor", "extension/dist/doctor", { recursive: true });
+cpSync("dist/helper", "extension/dist/helper", { recursive: true });
