@@ -1,0 +1,5 @@
+- insert:
+    - id: local-control-plane
+      name: local-control-plane-dsh
+      config:
+        workspace: !!js process.env.CONTROLPLANE_WORKSPACE || process.cwd()

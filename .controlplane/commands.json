@@ -1,0 +1,6 @@
+{
+  "commands": {
+    "compile": ["npm", "run", "compile"],
+    "test": ["npm", "test"]
+  }
+}

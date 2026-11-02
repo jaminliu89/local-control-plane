@@ -1,0 +1,14 @@
+node_modules/
+dist/
+extension/dist/
+.controlplane/sessions/
+.controlplane/current
+.controlplane/journals/
+.controlplane/helper.json
+.controlplane/frames/
+release/
+mac-helper/.build/
+mac-helper/dist/
+*.vsix
+*.log
+.DS_Store

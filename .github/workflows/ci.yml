@@ -1,0 +1,80 @@
+name: ci
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run smoke
+      - run: npm run pack
+      - uses: actions/upload-artifact@v4
+        with:
+          name: local-control-plane-lite
+          path: |
+            release/local-control-plane-*.tar.gz
+            release/latest.json
+          if-no-files-found: error
+
+  mac-helper:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build ControlPlaneHelper.app
+        run: |
+          cd mac-helper
+          ./scripts/build-app.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ControlPlaneHelper-app
+          path: mac-helper/dist/ControlPlaneHelper.app
+          if-no-files-found: error
+
+  compose-full:
+    needs: [test, mac-helper]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: local-control-plane-lite
+          path: release
+      - uses: actions/download-artifact@v4
+        with:
+          name: ControlPlaneHelper-app
+          path: release/artifacts
+      - name: Normalize app path
+        run: |
+          set -euo pipefail
+          mkdir -p release/artifacts
+          if [[ -d release/artifacts/ControlPlaneHelper.app ]]; then
+            echo "app ready at artifacts root"
+          else
+            found="$(find release/artifacts -type d -name 'ControlPlaneHelper.app' | head -n 1 || true)"
+            [[ -n "$found" ]] || { echo "missing app"; find release -maxdepth 4; exit 1; }
+            rm -rf release/artifacts/ControlPlaneHelper.app
+            mv "$found" release/artifacts/ControlPlaneHelper.app
+          fi
+      - run: npm run compose:full
+      - uses: actions/upload-artifact@v4
+        with:
+          name: local-control-plane-full
+          path: |
+            release/local-control-plane-*-full.tar.gz
+            release/latest-full.json
+          if-no-files-found: error
